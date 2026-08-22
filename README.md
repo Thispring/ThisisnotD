@@ -121,7 +121,7 @@ ThisisnotD는 플레이어의 이동과 물리 상호작용을 기반으로 스�
 
 **Windows**
 
-[Download for Windows](https://drive.google.com/file/d/13_nnEqndyE6TdsRHDRKyuC7JMCueaRo7/view?usp=drive_link)
+[Download for Windows](https://drive.google.com/file/d/19dEpyFZtkxwR7povUbqtlJ0VQR-Dc787/view)
 
 **macOS**
 
