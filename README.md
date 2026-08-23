@@ -31,9 +31,9 @@ ThisisnotD는 플레이어의 이동과 물리 상호작용을 기반으로 스�
 
 ## Gameplay
 
+| 초반 플레이 장면 | 보스의 추격 장면 |
 | :---: | :---: |
 | <img src="ScreenShot/s2.jpg" width="100%" alt="초반 플레이 장면"> | <img src="ScreenShot/s3.jpg" width="100%" alt="보스의 추격 장면"> |
-| 초반 플레이 장면 | 보스의 추격 장면 |
 
 게임 플레이 영상은 아래 링크에서 확인할 수 있습니다.
 
