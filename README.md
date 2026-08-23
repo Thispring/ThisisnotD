@@ -1,12 +1,16 @@
 # ThisisnotD
 
+<p align="center">
+  <img src="ScreenShot/s1.jpg" width="85%" alt="메인 화면">
+</p>
+
 Unity 기반으로 제작한 3D 플랫포머 게임입니다.
 
 제한 시간 안에 스테이지를 진행하며, 장애물과 보스의 공격을 피하고 목표 지점까지 도달하는 게임입니다.
 
 ---
 
-## 📖 프로젝트 소개
+## 프로젝트 소개
 
 ThisisnotD는 플레이어의 이동과 물리 상호작용을 기반으로 스테이지를 진행하는 3D 플랫포머 게임입니다.
 
@@ -16,17 +20,20 @@ ThisisnotD는 플레이어의 이동과 물리 상호작용을 기반으로 스�
 
 | 항목 | 내용 |
 | --- | --- |
-| 개발 기간 | 3개월 |
-| 개발 인원 | 총 3명 |
-| 팀 구성 | 아트 2명 / 프로그래밍 1명 (본인) |
 | 플랫폼 | PC |
 | 개발 엔진 | Unity |
 | 개발 언어 | C# |
-| 담당 역할 | 클라이언트 프로그래밍 |
+| 개발 기간 | 2024.09.01 ~ 2024.12.20 |
+| 개발 인원 | 총 3명 |
+| 팀 구성 | 아트 2명 / 프로그래밍 1명 (본인) |
 
 ---
 
-## 🎮 Gameplay
+## Gameplay
+
+| :---: | :---: |
+| <img src="ScreenShot/s2.jpg" width="100%" alt="초반 플레이 장면"> | <img src="ScreenShot/s3.jpg" width="100%" alt="보스의 추격 장면"> |
+| 초반 플레이 장면 | 보스의 추격 장면 |
 
 게임 플레이 영상은 아래 링크에서 확인할 수 있습니다.
 
@@ -34,7 +41,21 @@ ThisisnotD는 플레이어의 이동과 물리 상호작용을 기반으로 스�
 
 ---
 
-## 👨‍💻 My Role
+##Download
+
+게임 실행파일은 아래 링크에서 다운로드 할 수 있습니다.
+
+**Windows**
+
+[Download for Windows](https://drive.google.com/file/d/19dEpyFZtkxwR7povUbqtlJ0VQR-Dc787/view)
+
+**macOS**
+
+[Download for macOS](https://drive.google.com/file/d/1YgbZ_0cqSjRkVH5SivMYDDFPsDBWPGR3/view?usp=drive_link)
+
+---
+
+## My Role
 
 ### Client Programming
 
@@ -48,9 +69,9 @@ ThisisnotD는 플레이어의 이동과 물리 상호작용을 기반으로 스�
 
 ---
 
-# 🎯 주요 구현 기능
+# 주요 구현 기능
 
-## 👁️ 보스 감지 및 단계별 행동 시스템
+## 보스 감지 및 단계별 행동 시스템
 
 게임 진행 상태에 따라 보스의 이동과 플레이어 감지 방식이 변경되도록 구현했습니다.
 
@@ -60,14 +81,14 @@ ThisisnotD는 플레이어의 이동과 물리 상호작용을 기반으로 스�
 
 **관련 코드**
 
-- [BossControll.cs](https://github.com/Thispring/GameDesign02-ScriptOnly/blob/main/Script/Boss/BossControll.cs)
-- [BossEyes.cs](https://github.com/Thispring/GameDesign02-ScriptOnly/blob/main/Script/Boss/BossEyes.cs)
-- [LeftEye.cs](https://github.com/Thispring/GameDesign02-ScriptOnly/blob/main/Script/Boss/LeftEye.cs)
-- [RightEye.cs](https://github.com/Thispring/GameDesign02-ScriptOnly/blob/main/Script/Boss/RightEye.cs)
+- [BossControll.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/BossControll.cs)
+- [BossEyes.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/BossEyes.cs)
+- [LeftEye.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/LeftEye.cs)
+- [RightEye.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/RightEye.cs)
 
 ---
 
-## 🫥 엄폐 오브젝트를 고려한 플레이어 감지
+## 엄폐 오브젝트를 고려한 플레이어 감지
 
 보스의 시야 판정에 단순히 플레이어의 위치만 사용하는 것이 아니라, 플레이어와 보스 사이에 존재하는 오브젝트를 함께 고려하도록 구현했습니다.
 
@@ -77,14 +98,14 @@ ThisisnotD는 플레이어의 이동과 물리 상호작용을 기반으로 스�
 
 **관련 코드**
 
-- [LeftEye.cs](https://github.com/Thispring/GameDesign02-ScriptOnly/blob/main/Script/Boss/LeftEye.cs)
-- [RightEye.cs](https://github.com/Thispring/GameDesign02-ScriptOnly/blob/main/Script/Boss/RightEye.cs)
-- [HideObject.cs](https://github.com/Thispring/GameDesign02-ScriptOnly/blob/main/Script/HideObject.cs)
-- [ObjectMove.cs](https://github.com/Thispring/GameDesign02-ScriptOnly/blob/main/Script/ObjectMove.cs)
+- [LeftEye.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/LeftEye.cs)
+- [RightEye.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/RightEye.cs)
+- [HideObject.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/HideObject.cs)
+- [ObjectMove.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/ObjectMove.cs)
 
 ---
 
-## 📍 체크포인트 기반 사망 및 리스폰 시스템
+## 체크포인트 기반 사망 및 리스폰 시스템
 
 플레이어의 현재 진행 위치를 체크포인트 단위로 관리하고, 사망 시 마지막으로 도달한 체크포인트에서 게임을 다시 진행할 수 있도록 구현했습니다.
 
@@ -94,13 +115,13 @@ ThisisnotD는 플레이어의 이동과 물리 상호작용을 기반으로 스�
 
 **관련 코드**
 
-- [CheckPoint.cs](https://github.com/Thispring/GameDesign02-ScriptOnly/blob/main/Script/CheckPoint.cs)
-- [PlayerState.cs](https://github.com/Thispring/GameDesign02-ScriptOnly/blob/main/Script/Player/PlayerState.cs)
-- [FallChecker.cs](https://github.com/Thispring/GameDesign02-ScriptOnly/blob/main/Script/FallChecker.cs)
+- [CheckPoint.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/CheckPoint.cs)
+- [PlayerState.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Player/PlayerState.cs)
+- [FallChecker.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/FallChecker.cs)
 
 ---
 
-# 🛠 사용 기술
+# 사용 기술
 
 | 기술 | 활용 |
 | --- | --- |
@@ -108,24 +129,6 @@ ThisisnotD는 플레이어의 이동과 물리 상호작용을 기반으로 스�
 | C# | 게임 로직 및 시스템 구현 |
 | Unity Physics | 플레이어 및 오브젝트 물리 상호작용, 충돌 및 감지 처리 |
 | Unity UI | 게임 진행 정보 및 인터페이스 구현 |
-
----
-
-# 🔗 Links
-
-### 🎥 Gameplay Video
-
-[YouTube - ThisisnotD Gameplay](https://youtu.be/aMAQvpVFlr4)
-
-### 💾 Download
-
-**Windows**
-
-[Download for Windows](https://drive.google.com/file/d/19dEpyFZtkxwR7povUbqtlJ0VQR-Dc787/view)
-
-**macOS**
-
-[Download for macOS](https://drive.google.com/file/d/1YgbZ_0cqSjRkVH5SivMYDDFPsDBWPGR3/view?usp=drive_link)
 
 ---
 
