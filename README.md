@@ -4,19 +4,13 @@
   <img src="ScreenShot/s1.jpg" width="85%" alt="메인 화면">
 </p>
 
-Unity 기반으로 제작한 3D 플랫포머 게임입니다.
+Unity로 제작한 3D 게임입니다.
 
-제한 시간 안에 스테이지를 진행하며, 장애물과 보스의 공격을 피하고 목표 지점까지 도달하는 게임입니다.
+제한 시간 안에 오브젝트를 밀고, 엄폐물 뒤에 숨어 보스의 시야를 피하며 탈출하는 게임입니다.
 
 ---
 
 ## 프로젝트 소개
-
-ThisisnotD는 플레이어의 이동과 물리 상호작용을 기반으로 스테이지를 진행하는 3D 플랫포머 게임입니다.
-
-게임 진행 과정에서 체크포인트를 통해 현재 진행 상태를 관리하고, 플레이어가 사망할 경우 마지막 체크포인트에서 다시 게임을 진행할 수 있도록 구현했습니다.
-
-후반부에는 보스의 이동과 시야를 활용한 추적 및 감지 시스템을 구현했으며, 플레이어는 이동 가능한 오브젝트나 엄폐물을 활용하여 보스의 감지를 피하며 스테이지를 진행합니다.
 
 | 항목 | 내용 |
 | --- | --- |
@@ -43,92 +37,69 @@ ThisisnotD는 플레이어의 이동과 물리 상호작용을 기반으로 스�
 
 ## Download
 
-게임 실행파일은 아래 링크에서 다운로드 할 수 있습니다.
+게임 실행 파일은 아래 링크에서 다운로드할 수 있습니다.
 
-**Windows**
-
-[Download for Windows](https://drive.google.com/file/d/19dEpyFZtkxwR7povUbqtlJ0VQR-Dc787/view)
-
-**macOS**
-
-[Download for macOS](https://drive.google.com/file/d/1YgbZ_0cqSjRkVH5SivMYDDFPsDBWPGR3/view?usp=drive_link)
+- [Download for Windows](https://drive.google.com/file/d/19dEpyFZtkxwR7povUbqtlJ0VQR-Dc787/view)
+- [Download for macOS](https://drive.google.com/file/d/1YgbZ_0cqSjRkVH5SivMYDDFPsDBWPGR3/view)
 
 ---
 
 ## My Role
 
-### Client Programming
+프로그래밍 전체를 담당했습니다.
 
-- 플레이어 이동 및 물리 기반 상호작용 구현
-- 체크포인트 및 사망·리스폰 시스템 구현
-- 게임 진행 상태 및 제한 시간 관리
-- 보스의 단계별 이동 및 플레이어 감지 시스템 구현
-- 이동 오브젝트 및 엄폐물 시스템 구현
-- 카메라 전환 및 장면 이동 구현
-- UI 및 게임 사운드 처리
+- Rigidbody 기반 플레이어 이동과 오브젝트 밀기 구현
+- 체크포인트 도달 단계에 따른 게임 진행, 제한 시간, 엔딩 씬 전환 구현
+- 보스 이동 연출과 시야(SphereCast) 기반 플레이어 감지 구현
+- 카메라 시점 전환과 로딩 씬 구현
+- 진행 단계별 BGM 전환과 조작 키 안내 UI 구현
 
 ---
 
-# 주요 구현 기능
+## 주요 구현 내용
 
-## 보스 감지 및 단계별 행동 시스템
+### 보스 시야 감지와 엄폐
 
-게임 진행 상태에 따라 보스의 이동과 플레이어 감지 방식이 변경되도록 구현했습니다.
+보스의 양쪽 눈(`LeftEye`, `RightEye`)이 매 프레임 시선 방향으로 `Physics.SphereCast`를 반복해서 쏘며 플레이어를 찾습니다. 둘 중 하나라도 플레이어를 감지하면 `BossEyes`에서 플레이어를 사망 상태로 바꿉니다.
 
-플레이어의 체크포인트를 기준으로 보스의 페이즈를 관리하며, 각 단계에 따라 이동 속도와 행동 범위를 변경하도록 구성했습니다.
+엄폐물(`HideObject`)과 밀 수 있는 오브젝트(`ObjectMove`)는 각자 `Physics.BoxCast`와 `LayerMask`로 지정한 방향의 가까운 범위 안에 플레이어가 있는지 확인해 상태 값으로 저장합니다. 보스의 시선이 플레이어에 닿았을 때 엄폐물 중 하나라도 이 상태 값이 켜져 있으면 숨은 것으로 보고 감지하지 않습니다. 시선이 엄폐물에 먼저 닿으면 그 지점에서 탐색을 멈춥니다.
 
-보스의 양쪽 눈은 각각 독립적으로 플레이어를 탐색하며, 두 감지 결과를 `BossEyes`에서 확인하여 플레이어의 감지 여부를 결정합니다.
+시선 경로와 BoxCast 범위는 `OnDrawGizmos`로 씬 뷰에 그려 배치를 조정할 때 확인할 수 있게 했습니다.
 
-**관련 코드**
+**관련 코드** [BossEyes.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/BossEyes.cs) · [LeftEye.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/LeftEye.cs) · [HideObject.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/HideObject.cs) · [ObjectMove.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/ObjectMove.cs)
 
-- [BossControll.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/BossControll.cs)
-- [BossEyes.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/BossEyes.cs)
-- [LeftEye.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/LeftEye.cs)
-- [RightEye.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/RightEye.cs)
+### 진행 단계에 따른 보스 연출
 
----
+체크포인트를 통과할 때마다 `GameManger`의 진행 단계 값(`point`)이 올라가고, 보스는 이 값에 따라 동작합니다.
 
-## 엄폐 오브젝트를 고려한 플레이어 감지
+- 5단계: 보스가 지정된 위치까지 이동한 뒤 눈의 조명과 시선을 좌우로 왕복 회전시킵니다.
+- 6단계: 보스가 다음 위치로 이동하고, 시선 회전 속도를 2배로 올려 더 짧은 주기로 좌우를 훑습니다.
 
-보스의 시야 판정에 단순히 플레이어의 위치만 사용하는 것이 아니라, 플레이어와 보스 사이에 존재하는 오브젝트를 함께 고려하도록 구현했습니다.
+단계마다 다른 효과음을 한 번씩 재생하고, 이동이 끝나면 시선 회전을 시작합니다.
 
-`SphereCast`를 이용해 보스의 시야 방향에 존재하는 오브젝트를 탐색하고, 플레이어보다 먼저 이동 오브젝트나 엄폐물이 감지될 경우 플레이어가 숨겨진 상태로 처리합니다.
+**관련 코드** [BossControll.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/BossControll.cs) · [BossEyes.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/BossEyes.cs)
 
-엄폐 오브젝트는 별도의 상태를 관리하며, 보스의 시야 판정에서 플레이어 감지 여부를 결정하는 데 활용됩니다.
+### 추격 구간
 
-**관련 코드**
+`RushHourPoint` 태그가 붙은 지점들을 찾아 이름의 번호 순으로 정렬(LINQ `OrderBy`)하고, 코루틴에서 각 지점 사이를 `Vector3.Lerp`로 이동합니다. 지점을 하나 지날 때마다 구간 이동 시간을 0.1초씩 줄여(최소 0.5초) 점점 빨라지게 했습니다.
 
-- [LeftEye.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/LeftEye.cs)
-- [RightEye.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/RightEye.cs)
-- [HideObject.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/HideObject.cs)
-- [ObjectMove.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/ObjectMove.cs)
+플레이어가 붙잡히면 시작 위치로 돌아가 2.5초 뒤 처음부터 다시 추격합니다.
 
----
+**관련 코드** [BossEyesRushHour.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/BossEyesRushHour.cs)
 
-## 체크포인트 기반 사망 및 리스폰 시스템
+### 체크포인트와 리스폰
 
-플레이어의 현재 진행 위치를 체크포인트 단위로 관리하고, 사망 시 마지막으로 도달한 체크포인트에서 게임을 다시 진행할 수 있도록 구현했습니다.
+체크포인트 트리거에 플레이어나 밀던 오브젝트가 닿으면 그 위치를 마지막 체크포인트로 저장하고 진행 단계 값을 올립니다. 낙하 구역에 들어가거나 보스에게 감지되면 사망 처리되고, 2초 뒤 마지막 체크포인트 위치에서 다시 시작합니다. 이때 밀 수 있는 오브젝트도 처음 위치로 되돌립니다.
 
-체크포인트에 도달하면 현재 위치를 플레이어의 마지막 체크포인트로 저장하고 게임 진행 상태를 갱신합니다.
+**관련 코드** [CheckPoint.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/CheckPoint.cs) · [PlayerState.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Player/PlayerState.cs) · [FallChecker.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/FallChecker.cs)
 
-플레이어가 낙하하거나 보스에게 감지되어 사망할 경우, 일정 시간 후 저장된 체크포인트 위치를 기준으로 플레이어를 리스폰하도록 구성했습니다.
+### 카메라 전환과 로딩 씬
 
-**관련 코드**
+카메라 이동은 목표 위치·회전으로 보간하는 코루틴(`MoveToPosition`)으로 만들고, 이동이 끝난 뒤 실행할 작업을 콜백으로 넘길 수 있게 했습니다. 추격 구간에서는 위에서 내려다보는 시점으로 전환하고, 구간이 끝나면 플레이어 뒤 시점으로 돌아옵니다.
 
-- [CheckPoint.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/CheckPoint.cs)
-- [PlayerState.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Player/PlayerState.cs)
-- [FallChecker.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/FallChecker.cs)
+로딩 씬은 `LoadSceneAsync`와 `allowSceneActivation`으로 다음 씬을 미리 불러오고, 로딩 바가 끝까지 찬 뒤 씬을 전환합니다. 로딩 바의 마지막 구간은 `Time.unscaledDeltaTime`으로 채웁니다.
 
----
-
-# 사용 기술
-
-| 기술 | 활용 |
-| --- | --- |
-| Unity | 게임 클라이언트 개발 |
-| C# | 게임 로직 및 시스템 구현 |
-| Unity Physics | 플레이어 및 오브젝트 물리 상호작용, 충돌 및 감지 처리 |
-| Unity UI | 게임 진행 정보 및 인터페이스 구현 |
+**관련 코드** [CameraMove.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/CameraMove.cs) · [LoadingScene.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/LoadingScene.cs)
 
 ---
 
