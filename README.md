@@ -51,7 +51,7 @@ Unity로 제작한 3D 게임입니다.
 - Rigidbody 기반 플레이어 이동과 오브젝트 밀기 구현
 - 체크포인트 도달 단계에 따른 게임 진행, 제한 시간, 엔딩 씬 전환 구현
 - 보스 이동 연출과 시야(SphereCast) 기반 플레이어 감지 구현
-- 카메라 시점 전환과 로딩 씬 구현
+- 버드뷰 카메라 전환 구현
 - 진행 단계별 BGM 전환과 조작 키 안내 UI 구현
 
 ---
@@ -79,27 +79,23 @@ Unity로 제작한 3D 게임입니다.
 
 **관련 코드** [BossControll.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/BossControll.cs) · [BossEyes.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/BossEyes.cs)
 
-### 추격 구간
-
-`RushHourPoint` 태그가 붙은 지점들을 찾아 이름의 번호 순으로 정렬(LINQ `OrderBy`)하고, 코루틴에서 각 지점 사이를 `Vector3.Lerp`로 이동합니다. 지점을 하나 지날 때마다 구간 이동 시간을 0.1초씩 줄여(최소 0.5초) 점점 빨라지게 했습니다.
-
-플레이어가 붙잡히면 시작 위치로 돌아가 2.5초 뒤 처음부터 다시 추격합니다.
-
-**관련 코드** [BossEyesRushHour.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Boss/BossEyesRushHour.cs)
-
 ### 체크포인트와 리스폰
 
 체크포인트 트리거에 플레이어나 밀던 오브젝트가 닿으면 그 위치를 마지막 체크포인트로 저장하고 진행 단계 값을 올립니다. 낙하 구역에 들어가거나 보스에게 감지되면 사망 처리되고, 2초 뒤 마지막 체크포인트 위치에서 다시 시작합니다. 이때 밀 수 있는 오브젝트도 처음 위치로 되돌립니다.
 
 **관련 코드** [CheckPoint.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/CheckPoint.cs) · [PlayerState.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/Player/PlayerState.cs) · [FallChecker.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/FallChecker.cs)
 
-### 카메라 전환과 로딩 씬
+### 카메라 전환
 
-카메라 이동은 목표 위치·회전으로 보간하는 코루틴(`MoveToPosition`)으로 만들고, 이동이 끝난 뒤 실행할 작업을 콜백으로 넘길 수 있게 했습니다. 추격 구간에서는 위에서 내려다보는 시점으로 전환하고, 구간이 끝나면 플레이어 뒤 시점으로 돌아옵니다.
+특정 구간에서는 카메라를 버드뷰로 바꿔, 위에서 내려다본 상태로 캐릭터를 조종하도록 했습니다.
 
-로딩 씬은 `LoadSceneAsync`와 `allowSceneActivation`으로 다음 씬을 미리 불러오고, 로딩 바가 끝까지 찬 뒤 씬을 전환합니다. 로딩 바의 마지막 구간은 `Time.unscaledDeltaTime`으로 채웁니다.
+카메라 이동은 위치(`Vector3.Lerp`)와 회전(`Quaternion.Lerp`)을 함께 보간하는 코루틴(`MoveToPosition`)으로 만들고, 이동이 끝난 뒤 실행할 작업을 콜백으로 넘길 수 있게 했습니다. 구간에 들어가면 위에서 내려다보는 시점(X축 90°)으로 전환하고, 구간이 끝나면 플레이어 뒤 기본 시점으로 돌아옵니다.
 
-**관련 코드** [CameraMove.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/CameraMove.cs) · [LoadingScene.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/LoadingScene.cs)
+- 구간 시작은 트리거(`CamPoint`)나 체크포인트 진행 단계로 판단합니다.
+- 전환 중에는 `isTransitioning` 플래그로 코루틴이 중복 실행되지 않게 막습니다.
+- 기본 시점으로 돌아올 때는 플레이어 이동 속도를 0으로 잠그고, 전환 완료 콜백에서 다시 풀어 줍니다.
+
+**관련 코드** [CameraMove.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/CameraMove.cs) · [CamPoint.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/CamPoint.cs) · [CheckPoint.cs](https://github.com/Thispring/ThisisnotD/blob/main/Script/CheckPoint.cs)
 
 ---
 
